@@ -20,13 +20,15 @@ while num_of_months !=month_range:
 	principal = principal * (1+rate/12) - (payment + extra_pay)
 	total_paid += (payment+extra_pay) 
 	num_of_months+=1
+	print(num_of_months, round(total_paid, 4), round(principal, 4))
 
 
-while principal > 0:
+while principal >= payment:
 	
 	principal = principal * (1+rate/12) - payment
 	total_paid += payment 
 	num_of_months +=1
+	print(num_of_months, round(total_paid, 4), round(principal, 4))
               		
 print('Total paid', round(total_paid, 4), 'over a period of', num_of_months)
 
