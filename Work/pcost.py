@@ -12,7 +12,9 @@ def portfolio_cost(filename):
         next(r)
         for line in r:
             try:
-                total_cost += float(line[2])
+                num_shares = int(line[1])
+                stock_price = float(line[2])
+                total_cost += (num_shares*stock_price)
             except (ValueError, TypeError, RuntimeError) as e:
                 print(e, 'Check your file for bad lines!\n')
                 pass
