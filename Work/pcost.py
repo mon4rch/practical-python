@@ -6,7 +6,7 @@ import sys
 def portfolio_cost(filename):
     'Calculates the total cost of shares in portfolio csv file'
     total_cost = 0
-    print("Reading file 'Portfolio.csv'...\n")
+    print(f"Reading file {filename}...\n")
     with open(filename) as file:
         r = csv.reader(file)
         next(r)
@@ -20,10 +20,12 @@ def portfolio_cost(filename):
                 pass
         return total_cost
 
+				
 if len(sys.argv) == 2:
     filename = sys.argv[1]
 else:
     filename = 'Data/portfolio.csv'
+    
 cost = portfolio_cost(filename)
 print(f'Total cost of shares is {round(cost, 4)}$')
 
