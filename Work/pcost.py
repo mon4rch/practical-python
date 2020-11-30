@@ -1,16 +1,16 @@
 #!/usr/bin/python3
-# pcost.py Exercise 1.30-31: create a function for reading the portfolio files + error handling
-
+# pcost.py Exercise 1.30-31-32-33: create a function for reading the portfolio files + error handling use 'CSV# module, add command line functionality (let user pass filename from cmd/bash/terminal)
+import csv
+import sys
 
 def portfolio_cost(filename):
     'Calculates the total cost of shares in portfolio csv file'
     total_cost = 0
     print("Reading file 'Portfolio.csv'...\n")
-    with open(filename, 'rt') as file:
-        next(file)
-        for line in file:
-            line = line.strip('\n')
-            line = line.split(',')
+    with open(filename) as file:
+        r = csv.reader(file)
+        next(r)
+        for line in r:
             try:
                 total_cost += float(line[2])
             except (ValueError, TypeError, RuntimeError) as e:
@@ -18,7 +18,11 @@ def portfolio_cost(filename):
                 pass
         return total_cost
 
-cost = portfolio_cost('Data/portfolio.csv')
-print(f'Total cost of shares is {round(cost, 4)}')
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = 'Data/portfolio.csv'
+cost = portfolio_cost(filename)
+print(f'Total cost of shares is {round(cost, 4)}$')
 
 
