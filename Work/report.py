@@ -27,24 +27,31 @@ def read_prices(filename):
 	with open(filename) as file:
 		r = csv.reader(file)
 		for line in r:
-			if line == []:
+			if line == [] or line == "":
 				print('A blank line has been encounterd')
 				pass
 			else:
 				holding_dict = {
-				line[0]:  line[0],
-				line[1]: line[1] 
+				line[0]: line[0],
+				line[1]: float(line[1]) 
 				}
 				prices.append(holding_dict)
 		return dict(prices)
 
 if __name__ == '__main__':
-	if len(sys.argv) > 1 and sys.argv[1] == 'Data/prices.csv':
-		p = read_prices(str(sys.argv[1]))
-	else:
-		p = read_portfolio('Data/portfolio.csv')
-
-	pprint(p)
+	prices = read_prices('Data/prices.csv')
+	portfolio = read_portfolio('Data/portfolio.csv')
+	for line in portfolio:
+		print(line)
+		price_big = float(prices[line['name']]) 
+		price_small = line['price']
+		gain = ((price_big - price_small)/price_small) * 100
+		if gain < 0:
+			print(f'Loss is {abs(round(gain, 3))}%..\n')
+		else:
+			print(f'Gain is {round(gain,3)}%..\n')
 	
+		
+		
 	
 	
