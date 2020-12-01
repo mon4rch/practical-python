@@ -24,7 +24,7 @@ def read_prices(filename):
 	'This functions reades prices from Data/prices.csv file'
 	print(f'Reading file {filename}...\n')
 	prices = []
-	with open(filename) as file:
+	with open(filename, 'rt') as file:
 		r = csv.reader(file)
 		for line in r:
 			if line == [] or line == "":
@@ -37,19 +37,29 @@ def read_prices(filename):
 				}
 				prices.append(holding_dict)
 		return dict(prices)
+		
+def make_report(stocks, pricing):
+	dollar_sign = '$'
+	headers = ('Name', 'Shares', 'Price', 'Change')
+	#create x number of spaces between header values
+	s = ' ' * 6
+	print(s.join(headers))
+	print('-------- --------  --------  --------')
+	for line in stocks:
+		price_prices = float(pricing[line['name']]) 
+		price_portfolio = line['price']
+		#value = abs(((price_prices - price_portfolio)/price_portfolio) * 100) Gain/Loss as a percentage
+		value = price_prices - price_portfolio
+		print(f'{line["name"]:^10s}{line["shares"]:^10.2f} {dollar_sign}{line["price"]:<10.2f}{value:^10.2f}')
+	exit(0)
+	
+	
+	
 
 if __name__ == '__main__':
 	prices = read_prices('Data/prices.csv')
 	portfolio = read_portfolio('Data/portfolio.csv')
-	for line in portfolio:
-		print(line)
-		price_big = float(prices[line['name']]) 
-		price_small = line['price']
-		gain = ((price_big - price_small)/price_small) * 100
-		if gain < 0:
-			print(f'Loss is {abs(round(gain, 3))}%..\n')
-		else:
-			print(f'Gain is {round(gain,3)}%..\n')
+	print(make_report(portfolio, prices))
 	
 		
 		
