@@ -11,11 +11,12 @@ def read_portfolio(filename):
     with open(filename, 'rt') as f:
         rows = csv.reader(f)
         headers = next(rows)
-        for row in rows:
+        for i, line in enumerate(rows):
+            record = dict(zip(headers, line))
             holding_dict = {
-            'name':   row[0], 
-            'shares': int(row[1]), 
-            'price':  float(row[2])
+            'name':   record['name'], 
+            'shares': int(record['shares']), 
+            'price':  float(record['price'])
             }
             portfolio.append(holding_dict)
         return portfolio
@@ -26,42 +27,46 @@ def read_prices(filename):
 	prices = []
 	with open(filename, 'rt') as file:
 		r = csv.reader(file)
-		for line in r:
-			if line == [] or line == "":
-				print('A blank line has been encounterd')
-				pass
-			else:
-				holding_dict = {
-				line[0]: line[0],
-				line[1]: float(line[1]) 
-				}
-				prices.append(holding_dict)
-		return dict(prices)
-		
+		headers = ['name', 'price']
+		for i, line in enumerate(r, start=1):
+		    record = dict(zip(headers, line))
+		    if record == {}:
+		    	print(f'no record at row {i}')
+		    	continue
+		    try:
+		    	
+		    	holding_dict = {
+		    	'name':  record['name'],
+		    	'price': float(record['price'])
+		    	}
+		    	prices.append(holding_dict)
+		    except ValueError:
+		    	print(f'\nRow{i}: Couldn\'t convert: {line}')
+		    	pass
+		return prices
+
 def make_report(stocks, pricing):
+	print(pricing, type(pricing))
 	dollar_sign = '$'
 	headers = ('Name', 'Shares', 'Price', 'Change')
 	#create x number of spaces between header values
 	s = ' ' * 6
 	print(s.join(headers))
 	print('-------- --------  --------  --------')
-	for line in stocks:
-		price_prices = float(pricing[line['name']]) 
-		price_portfolio = line['price']
+	for i, line in enumerate(stocks):
+		price_prices = float(pricing[i]['price'])
+		price_portfolio = float(line['price'])
 		#value = abs(((price_prices - price_portfolio)/price_portfolio) * 100) Gain/Loss as a percentage
-		value = price_prices - price_portfolio
+		value = price_portfolio - price_prices  
 		print(f'{line["name"]:^10s}{line["shares"]:^10.2f} {dollar_sign}{line["price"]:<10.2f}{value:^10.2f}')
-	exit(0)
+		
+	return f'Program ran successfully'
 	
 	
 	
 
 if __name__ == '__main__':
 	prices = read_prices('Data/prices.csv')
-	portfolio = read_portfolio('Data/portfolio.csv')
+	portfolio = read_portfolio('Data/portfoliodate.csv')
 	print(make_report(portfolio, prices))
-	
-		
-		
-	
-	
+

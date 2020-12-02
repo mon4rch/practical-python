@@ -9,24 +9,25 @@ def portfolio_cost(filename):
     print(f"Reading file {filename}...\n")
     with open(filename) as file:
         r = csv.reader(file)
-        next(r)
-        for line in r:
-            try:
-                num_shares = int(line[1])
-                stock_price = float(line[2])
-                total_cost += (num_shares*stock_price)
-            except (ValueError, TypeError, RuntimeError) as e:
-                print(e, 'Check your file for bad lines!\n')
-                pass
+        headers = next(r)
+        for i, line in enumerate(r, start=1):
+        	record = dict(zip(headers, line))
+        	print(record)
+        	try:
+        	    num_shares = int(record['shares'])
+        	    stock_price = float(record['price'])
+        	    total_cost += (num_shares*stock_price)
+        	except ValueError:
+        		print(f'\nRow {i}: Couldn\'t convert {line}')
         return total_cost
 
 				
 if len(sys.argv) == 2:
     filename = sys.argv[1]
 else:
-    filename = 'Data/portfolio.csv'
+    filename = 'Data/missing.csv'
     
 cost = portfolio_cost(filename)
-print(f'Total cost of shares is {round(cost, 4)}$')
+print(f'Total cost of shares is {cost:0.2f}$')
 
 
